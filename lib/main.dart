@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:slide_puzzle/model.dart';
 
+import 'grid.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Slide Puzzle',
       theme: ThemeData(
           primaryColor: Color.fromRGBO(50, 50, 50, 1),
           accentColor: Colors.white),
@@ -26,89 +28,6 @@ class Game extends StatefulWidget {
 
   @override
   _GameState createState() => _GameState();
-}
-
-class EmptyTile extends StatelessWidget {
-  const EmptyTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class GameTile extends StatelessWidget {
-  final Function onClick;
-  final String text;
-
-  const GameTile({Key? key, required this.onClick, required this.text})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return GestureDetector(
-        onTap: () {
-          onClick();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              color: theme.primaryColor,
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          margin: const EdgeInsets.all(1.5),
-          child: Center(
-              child: Text(text,
-                  style: TextStyle(
-                      color: theme.accentColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold))),
-        ));
-  }
-}
-
-class GameCol extends StatelessWidget {
-  final int x;
-  final PuzzleModel puzzle;
-  final Function onClick;
-
-  const GameCol(
-      {Key? key, required this.x, required this.puzzle, required this.onClick})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(
-          3,
-          (y) => Expanded(
-              child: puzzle.get(x, y) >= 0
-                  ? GameTile(
-                      text: puzzle.get(x, y).toString(),
-                      onClick: () {
-                        onClick(x, y);
-                      })
-                  : EmptyTile())),
-    );
-  }
-}
-
-class GameGrid extends StatelessWidget {
-  final PuzzleModel puzzle;
-  final Function onClick;
-
-  const GameGrid({Key? key, required this.puzzle, required this.onClick})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-          3,
-          (x) =>
-              Expanded(child: GameCol(x: x, puzzle: puzzle, onClick: onClick))),
-    );
-  }
 }
 
 class _GameState extends State<Game> {

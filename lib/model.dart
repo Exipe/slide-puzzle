@@ -10,8 +10,13 @@ class PuzzleModel {
   var grid = complete_grid
       .map((e) => List.from(e, growable: false))
       .toList(growable: false);
-  var cursorX = 2;
-  var cursorY = 2;
+  late int cursorX;
+  late int cursorY;
+
+  PuzzleModel() {
+    cursorX = width-1;
+    cursorY = height-1;
+  }
 
   bool move(x, y) {
     final distX = (cursorX - x).abs();
@@ -29,8 +34,8 @@ class PuzzleModel {
   }
 
   bool checkCompletion() {
-    for(var x = 0; x < 3; x++) {
-      for(var y = 0; y < 3; y++) {
+    for(var x = 0; x < width; x++) {
+      for(var y = 0; y < height; y++) {
         if(this.get(x, y) != complete_grid[y][x]) {
           return false;
         }
@@ -42,6 +47,14 @@ class PuzzleModel {
 
   int get(int x, int y) {
     return grid[y][x];
+  }
+
+  int get width {
+    return grid[0].length;
+  }
+
+  int get height {
+    return grid.length;
   }
 
   void shuffle() {
